@@ -1,0 +1,581 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Drainage Network | WebGIS</title>
+
+<style>
+:root {
+    --navy: #102b3f;
+    --blue: #176b87;
+    --cyan: #20a5b5;
+    --light: #f1f6f8;
+    --text: #253b4a;
+    --muted: #718391;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+}
+
+/* HEADER */
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 17px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: var(--cyan);
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    letter-spacing: .5px;
+}
+
+.brand p {
+    font-size: 11px;
+    color: #b9d3df;
+    margin-top: 4px;
+}
+
+nav {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+nav a:hover {
+    color: #65d6e3;
+}
+
+/* HERO */
+
+.hero {
+    padding: 55px 7%;
+    background:
+    linear-gradient(110deg, rgba(9,35,53,.96),
+    rgba(17,94,116,.83)),
+    url("https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?q=80&w=1800")
+    center/cover;
+    color: white;
+}
+
+.hero-content {
+    max-width: 780px;
+}
+
+.tag {
+    color: #72e2e8;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.hero h2 {
+    font-size: clamp(30px, 5vw, 46px);
+    margin: 15px 0;
+}
+
+.hero p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #dcebf0;
+    max-width: 680px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 21px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--cyan);
+    color: white;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+/* MAIN CONTENT */
+
+.container {
+    width: 90%;
+    max-width: 1450px;
+    margin: 35px auto;
+}
+
+.section-title {
+    margin-bottom: 18px;
+}
+
+.section-title h2 {
+    font-size: 23px;
+    color: var(--navy);
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+/* INFORMATION CARDS */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    border: 1px solid #e1eaee;
+    box-shadow: 0 3px 12px rgba(20,50,70,.04);
+}
+
+.card-icon {
+    font-size: 26px;
+    margin-bottom: 12px;
+}
+
+.card h3 {
+    font-size: 15px;
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* MAP SECTION */
+
+.map-section {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    border: 1px solid #e1eaee;
+    box-shadow: 0 4px 15px rgba(20,50,70,.05);
+}
+
+.map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.map-header h2 {
+    color: var(--navy);
+    font-size: 20px;
+}
+
+.map-header p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.map-actions {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.map-actions button {
+    padding: 10px 15px;
+    border: none;
+    background: var(--navy);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.map-actions button:hover {
+    background: var(--blue);
+}
+
+.map-frame {
+    width: 100%;
+    height: 620px;
+    border: 1px solid #d9e3e8;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #e7f0f2;
+}
+
+.map-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.map-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 12px;
+}
+
+/* ABOUT */
+
+.about {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.about-box {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    border: 1px solid #e1eaee;
+}
+
+.about-box h2 {
+    color: var(--navy);
+    font-size: 19px;
+    margin-bottom: 14px;
+}
+
+.about-box p {
+    color: #627583;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.about-box ul {
+    padding-left: 19px;
+    color: #627583;
+    font-size: 13px;
+    line-height: 2.1;
+}
+
+/* FOOTER */
+
+footer {
+    background: var(--navy);
+    text-align: center;
+    color: #c5d8e0;
+    padding: 25px 15px;
+    font-size: 12px;
+    margin-top: 45px;
+}
+
+footer strong {
+    color: white;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 750px) {
+
+    header {
+        padding: 15px 5%;
+    }
+
+    nav {
+        gap: 13px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .map-frame {
+        height: 480px;
+    }
+
+    .hero {
+        padding: 40px 6%;
+    }
+}
+
+@media(max-width: 450px) {
+    .brand h1 {
+        font-size: 17px;
+    }
+
+    .map-frame {
+        height: 400px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+    <div class="brand">
+        <div class="logo">🌊</div>
+        <div>
+            <h1>DRAINAGE WebGIS</h1>
+            <p>Geospatial Mapping & Spatial Analysis</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#overview">Overview</a>
+        <a href="#map">Interactive Map</a>
+        <a href="#about">About</a>
+    </nav>
+</header>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+    <div class="hero-content">
+
+        <div class="tag">GEOGRAPHIC INFORMATION SYSTEM</div>
+
+        <h2>Drainage Network Mapping & Analysis</h2>
+
+        <p>
+            Explore the spatial distribution of drainage networks
+            through an interactive WebGIS platform. Visualize
+            geographical features, explore drainage patterns and
+            understand the spatial characteristics of the study area.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#map" class="btn btn-primary">
+                Explore Interactive Map →
+            </a>
+
+            <a href="#overview" class="btn btn-secondary">
+                Project Overview
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- OVERVIEW -->
+
+<main class="container" id="overview">
+
+    <div class="section-title">
+        <h2>Project Overview</h2>
+        <p>Understanding the drainage system through spatial technology.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-icon">🗺️</div>
+            <h3>Spatial Mapping</h3>
+            <p>
+                Mapping and visualization of drainage networks
+                using Geographic Information System technology.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💧</div>
+            <h3>Drainage Network</h3>
+            <p>
+                Explore the spatial arrangement and connectivity
+                of drainage channels within the study area.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Spatial Analysis</h3>
+            <p>
+                Support geographical interpretation and
+                understanding of drainage characteristics.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- INTERACTIVE MAP -->
+
+    <section class="map-section" id="map">
+
+        <div class="map-header">
+
+            <div>
+                <h2>Interactive Drainage Map</h2>
+                <p>Explore the live WebGIS map below.</p>
+            </div>
+
+            <div class="map-actions">
+
+                <button onclick="openMap()">
+                    Open Map ↗
+                </button>
+
+                <button onclick="fullscreenMap()">
+                    Full Screen ⛶
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="map-frame" id="mapContainer">
+
+            <iframe
+                id="drainageMap"
+                src="https://arakkalsha786-dotcom.github.io/NEW1/"
+                title="Interactive Drainage Network WebGIS"
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+
+        </div>
+
+        <p class="map-note">
+            Note: The interactive map is connected to your existing
+            GitHub Pages WebGIS application. Map layers and tools
+            are controlled by the original map application.
+        </p>
+
+    </section>
+
+    <!-- ABOUT -->
+
+    <section class="about" id="about">
+
+        <div class="about-box">
+            <h2>About This WebGIS</h2>
+
+            <p>
+                This WebGIS platform provides an interactive
+                environment for exploring drainage network
+                information. It integrates web-based mapping
+                with geographical data visualization to make
+                spatial information more accessible.
+            </p>
+        </div>
+
+        <div class="about-box">
+            <h2>Project Information</h2>
+
+            <ul>
+                <li>Theme: Drainage Network Mapping</li>
+                <li>Technology: WebGIS</li>
+                <li>GIS: Geographic Information System</li>
+                <li>Platform: GitHub Pages</li>
+                <li>Map: Interactive Drainage Map</li>
+            </ul>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer>
+    <p><strong>DRAINAGE WebGIS</strong></p>
+    <p>Interactive Geospatial Mapping Platform</p>
+    <p style="margin-top:10px;">
+        © <span id="year"></span> | All Rights Reserved
+    </p>
+</footer>
+
+<script>
+
+// Open original interactive map
+
+function openMap() {
+    window.open(
+        "https://arakkalsha786-dotcom.github.io/NEW1/",
+        "_blank"
+    );
+}
+
+// Fullscreen map
+
+function fullscreenMap() {
+
+    const map = document.getElementById("mapContainer");
+
+    if (!document.fullscreenElement) {
+        map.requestFullscreen().catch(() => {
+            openMap();
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+// Current year
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>
